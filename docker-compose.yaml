@@ -8,10 +8,9 @@ services:
     ports:
        - 3306:3306
     environment:
-      MYSQL_ROOT_PASSWORD: aerolineas-usal
+      MYSQL_ROOT_PASSWORD: juanma
     volumes:
-      - ./src/resources/db/Aerolineas.sql:/docker-entrypoint-initdb.d/1-Create-Aerolineas.sql
-#      - ./src/resources/db/beatles.sql:/docker-entrypoint-initdb.d/2-paises.sql
+      - ./src/main/resources/db:/docker-entrypoint-initdb.d
 
   adminer:
     image: adminer

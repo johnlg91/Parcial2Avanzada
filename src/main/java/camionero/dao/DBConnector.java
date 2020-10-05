@@ -9,7 +9,7 @@ class DBConnector {
 
     private static final String URL = "jdbc:mysql://localhost:3306/camionero";
     private static final String USER = "root";
-    private static final String PASS = "aerolineas-usal";
+    private static final String PASS = "juanma";
 
     static Connection getConnection() {
         try {
