@@ -1,0 +1,20 @@
+version: '3.1'
+
+services:
+
+  db:
+    image: mysql
+    restart: always
+    ports:
+       - 3306:3306
+    environment:
+      MYSQL_ROOT_PASSWORD: aerolineas-usal
+    volumes:
+      - ./src/resources/db/Aerolineas.sql:/docker-entrypoint-initdb.d/1-Create-Aerolineas.sql
+#      - ./src/resources/db/beatles.sql:/docker-entrypoint-initdb.d/2-paises.sql
+
+  adminer:
+    image: adminer
+    restart: always
+    ports:
+      - 8080:8080
