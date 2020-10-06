@@ -1,5 +1,5 @@
+<%@ page contentType="text/html;charset=UTF-8" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
-<%@ page contentType="text/html;charset=UTF-8" language="java" %>
 
 <html>
 <head>
@@ -7,55 +7,50 @@
 </head>
 <body>
 
-<jsp:include page="/common/header.jsp"/>
+<a href="/">
+    <img src="/img/logo.jpg">
+</a>
 
 <h1>Camiones</h1>
 
-<section>
-    ${msg}
-</section>
+<p>${msg}</p>
 
-<section>
+<%--Formulario para guardar un nuevo camion--%>
+<form action="/trucks" method="post">
     <table>
-        <thead>
-            <tr>
-                <th>
-                    Patente
-                </th>
-                <th>
-                    Marca
-                </th>
-            </tr>
-        </thead>
-        <tbody>
-            <c:forEach var="track" items="${trucks}">
-                <tr>
-                    <td>${track.plateNumber}</td>
-                    <td>${track.model}</td>
-                    <td>
-                        <form action="/trucks" method="delete">
-                            <button type="submit">Borrar</button>
-                        </form>
-                    </td>
-                </tr>
-            </c:forEach>
-        </tbody>
-    </table>
-</section>
+        <tr>
+            <th>Patente</th>
+            <th>Marca</th>
+        </tr>
 
-<section>
-    <form action="/trucks" method="post">
-        <div>
-            <label>Patente:</label>
-            <input type="number" name="plate_number"/>
-        </div>
-        <div>
-            <label>Marca:</label>
-            <input type="text" name="brand"/>
-        </div>
-        <button type="submit">Guardar</button>
-    </form>
-</section>
+        <tr>
+            <td>
+                <input type="number" name="plate_number"/>
+            </td>
+            <td>
+                <input type="text" name="brand"/>
+            </td>
+            <%-- todo mandar todos los otros datos--%>
+            <td>
+                <button type="submit">Agregar</button>
+            </td>
+        </tr>
+
+        <c:forEach var="truck" items="${trucks}">
+            <tr>
+                <td>${truck.plateNumber}</td>
+                <td>${truck.brand}</td>
+                <%-- todo mostrar todos los otros datos--%>
+                <td>
+                    <form action="/trucks" method="delete">
+                        <input type="hidden" name="id" value="${truck.plateNumber}"/>
+                        <button type="submit">Borrar</button>
+                    </form>
+                </td>
+            </tr>
+        </c:forEach>
+    </table>
+</form>
 
 </body>
 </html>

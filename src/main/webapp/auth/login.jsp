@@ -1,4 +1,4 @@
-<%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<%@ page contentType="text/html;charset=UTF-8" %>
 
 <html>
 <head>
@@ -6,10 +6,14 @@
 </head>
 <body>
 
+<a href="/">
+    <img src="/img/logo.jpg">
+</a>
+
+<h1>Login</h1>
+
 <form action="/login" method="post">
-    <div>
-        ${msg}
-    </div>
+    <p>${msg}</p>
     <div>
         <label>Username:</label>
         <input type="text" name="username"/>

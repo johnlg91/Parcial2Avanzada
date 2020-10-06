@@ -4,6 +4,7 @@ import camionero.dao.interfaces.TruckDAO;
 import camionero.model.Truck;
 
 import java.sql.Connection;
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
@@ -35,12 +36,34 @@ public class JdbcTruck extends JdbcBase<Truck, Integer> implements TruckDAO {
     }
 
     @Override
-    public boolean insert(Truck newEntity) {
-        return false;
+    public boolean insert(Truck truck) {
+        try (PreparedStatement ps = connection.prepareStatement(
+                "INSERT INTO truck(plate_number, brand, model, max_tons, tank_capacity, consumption) VALUES (?, ?, ?, ?,? ,?)")
+        ) {
+            ps.setInt(1, truck.getPlateNumber());
+            ps.setString(2, truck.getBrand());
+            ps.setString(3, truck.getModel());
+            ps.setInt(4, truck.getMaxTons());
+            ps.setInt(5, truck.getTankCapacity());
+            ps.setInt(6, truck.getConsumption());
+            return executeUpdate(ps);
+        } catch (SQLException ex) {
+            ex.printStackTrace();
+            return false;
+        }
     }
 
     @Override
-    public boolean update(Integer id, Truck updatedEntity) {
-        return false;
+    public boolean update(Integer id, Truck truck) {
+        try (PreparedStatement ps = connection.prepareStatement(
+                "UPDATE truck SET tank_capacity = ?  WHERE plate_number = ?")
+        ) {
+            ps.setInt(1, truck.getTankCapacity());
+            ps.setInt(2, id);
+            return executeUpdate(ps);
+        } catch (SQLException ex) {
+            ex.printStackTrace();
+            return false;
+        }
     }
 }

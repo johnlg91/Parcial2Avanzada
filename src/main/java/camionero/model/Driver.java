@@ -8,7 +8,7 @@ public class Driver {
     private String firstName;
     private String lastName;
     private Date birthDate;
-    private String licenseCategory;
+    private int licenseCategory;
     private String cellPhone;
 
     public Driver(int dni) {
@@ -43,11 +43,11 @@ public class Driver {
         this.birthDate = birthDate;
     }
 
-    public String getLicenseCategory() {
+    public int getLicenseCategory() {
         return licenseCategory;
     }
 
-    public void setLicenseCategory(String licenseCategory) {
+    public void setLicenseCategory(int licenseCategory) {
         this.licenseCategory = licenseCategory;
     }
 

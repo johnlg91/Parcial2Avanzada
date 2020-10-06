@@ -9,13 +9,18 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.util.List;
 
 @WebServlet({"trucks"})
 public class TruckServlet extends HttpServlet {
 
     protected void doGet(HttpServletRequest req, HttpServletResponse resp)
             throws ServletException, IOException {
-        req.setAttribute("trucks", DB.getInstance().getTruckDAO().list());
+
+        final List<Truck> trucks = DB.getInstance().getTruckDAO().list();
+
+        req.setAttribute("trucks", trucks);
+
         req.getRequestDispatcher("/admin/trucks.jsp").include(req, resp);
     }
 
@@ -24,12 +29,12 @@ public class TruckServlet extends HttpServlet {
         // agarramos los datos posteados
         String plateNumber = req.getParameter("plate_number");
         String brand = req.getParameter("brand");
-        // todo todos los datos
+        // todo get parameters para los datos
 
         // creamos el nuevo camion
         Truck truck = new Truck(Integer.parseInt(plateNumber));
         truck.setBrand(brand);
-        // todo todos los datos
+        // todo set todos los datos
 
         // guardamos el nuevo camion
         DB.getInstance().getTruckDAO().insert(truck);

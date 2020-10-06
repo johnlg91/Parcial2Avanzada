@@ -22,6 +22,7 @@ public class LoginServlet extends HttpServlet {
 
     protected void doPost(HttpServletRequest req, HttpServletResponse resp)
             throws ServletException, IOException {
+
         // agarramos user y password que se mandaron en el form de login.jsp
         String username = req.getParameter("username");
         String password = req.getParameter("password");
@@ -29,18 +30,25 @@ public class LoginServlet extends HttpServlet {
         // buscamos el usuario en la DB
         User user = DB.getInstance().getUserDAO().find(username);
 
-        // nos fijamos si esta OK el password
+        // nos fijamos si esta bien la password
         if (user != null && password.equals(user.getPassword())) {
-            // si esta ok, guardamos el usario en la session y vamos al home
-            HttpSession session = req.getSession();
-            session.setMaxInactiveInterval(Integer.MAX_VALUE); // que expire nunca
+            // esta ok, creamos la session
+            HttpSession session = req.getSession(true);
+            // guardamos el usuario en la session
             session.setAttribute("user", user);
+            // que expire nunca
+            session.setMaxInactiveInterval(Integer.MAX_VALUE);
+            // vamos al home
             resp.sendRedirect("/");
         } else {
-            // si esta mal, volvemos al login con el mensaje de error
+            // esta mal, nos quedamos en el login con un mensaje de error
             req.setAttribute("msg", "Usuario o password incorrectos!");
             req.getRequestDispatcher("/auth/login.jsp").include(req, resp);
         }
+    }
+
+    public static User getLoginUser(HttpServletRequest req) {
+        return (User) req.getSession().getAttribute("user");
     }
 }
 

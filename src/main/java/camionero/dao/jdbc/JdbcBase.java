@@ -10,7 +10,7 @@ import static java.lang.String.format;
 
 public abstract class JdbcBase<T, PK> implements CRUD<T, PK> {
 
-    private final Connection connection;
+    protected final Connection connection;
 
     public JdbcBase(Connection connection) {
         this.connection = connection;
@@ -23,25 +23,14 @@ public abstract class JdbcBase<T, PK> implements CRUD<T, PK> {
     abstract T toModel(ResultSet rs) throws SQLException;
 
     @Override
-    public boolean delete(PK id) {
-        return false;
-    }
-
-    @Override
     public T find(PK id) {
         // ejemplo: "select * from truck where plate_number = " + id
         // "select * from " + getTableName() + " where " + getPKColumnName() + " = ?"
-
-        try (
-                PreparedStatement statement = connection.prepareStatement(
-                        format("select * from %s where %s = ?", getTableName(), getPKColumnName())
-                )
-        ) {
-            statement.setObject(1, id);
-
-            final ResultSet rs = statement.executeQuery();
-            if (rs.next())
-                return toModel(rs);
+        try (PreparedStatement ps = connection.prepareStatement(
+                format("SELECT * FROM %s WHERE %s = ?", getTableName(), getPKColumnName()))) {
+            ps.setObject(1, id);
+            final ResultSet rs = ps.executeQuery();
+            if (rs.next()) return toModel(rs);
         } catch (SQLException sqlException) {
             sqlException.printStackTrace();
         }
@@ -51,15 +40,30 @@ public abstract class JdbcBase<T, PK> implements CRUD<T, PK> {
     @Override
     public List<T> list() {
         final List<T> result = new ArrayList<>();
-        try (
-                Statement statement = connection.createStatement()
-        ) {
-            final ResultSet rs = statement.executeQuery(format("select * from %s", getTableName()));
+        try (final Statement ps = connection.createStatement();
+             final ResultSet rs = ps.executeQuery(format("SELECT * FROM %s", getTableName()))) {
             while (rs.next())
                 result.add(toModel(rs));
         } catch (SQLException sqlException) {
             sqlException.printStackTrace();
         }
         return result;
+    }
+
+    @Override
+    public boolean delete(PK id) {
+        try (PreparedStatement ps = connection.prepareStatement(
+                format("DELETE FROM %s WHERE %s = ?", getTableName(), getPKColumnName()))) {
+            ps.setObject(1, id);
+            return executeUpdate(ps);
+        } catch (SQLException sqlException) {
+            sqlException.printStackTrace();
+            return false;
+        }
+    }
+//Ejecuta el update de la base de datos, si todó esta bien devuelve 1
+    boolean executeUpdate(PreparedStatement ps) throws SQLException {
+        int i = ps.executeUpdate();
+        return i == 1;
     }
 }

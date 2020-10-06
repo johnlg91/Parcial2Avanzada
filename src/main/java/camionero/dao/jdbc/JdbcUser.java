@@ -4,6 +4,7 @@ import camionero.dao.interfaces.UserDAO;
 import camionero.model.User;
 
 import java.sql.Connection;
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
@@ -33,12 +34,30 @@ public class JdbcUser extends JdbcBase<User, String> implements UserDAO {
     }
 
     @Override
-    public boolean insert(User newEntity) {
-        return false;
+    public boolean insert(User user) {
+        try (PreparedStatement ps = connection.prepareStatement(
+                "INSERT INTO user(user_name, password, admin, dni) VALUES (?, ?, ?, ?)")) {
+            ps.setString(1, user.getUserName());
+            ps.setString(2, user.getPassword());
+            ps.setBoolean(3, user.isAdmin());
+            ps.setInt(4, user.getDni());
+            return executeUpdate(ps);
+        } catch (SQLException ex) {
+            ex.printStackTrace();
+            return false;
+        }
     }
 
     @Override
-    public boolean update(String id, User updatedEntity) {
-        return false;
+    public boolean update(String id, User user) {
+        try (PreparedStatement ps = connection.prepareStatement(
+                "UPDATE user set password = ? WHERE user_name = ?")) {
+            ps.setString(1, user.getPassword());
+            ps.setString(2, id);
+            return executeUpdate(ps);
+        } catch (SQLException ex) {
+            ex.printStackTrace();
+            return false;
+        }
     }
 }

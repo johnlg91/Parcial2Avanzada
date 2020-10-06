@@ -10,7 +10,7 @@ create table driver
     license_category varchar(30) null,
     cellphone        varchar(30) null unique
 )
-comment 'Tabla de choferes';
+comment 'Tabla de choferes';// en consola anda
 
 create table truck
 (
@@ -21,7 +21,7 @@ create table truck
     max_tons      int         null,
     tank_capacity int         null
         comment 'Capacidad el tanque en litros',
-    cosumption    int         null
+    consumption    int         null
         comment 'Consummo de nafta en km/L'
 )
 comment 'Tabla de camiones';
