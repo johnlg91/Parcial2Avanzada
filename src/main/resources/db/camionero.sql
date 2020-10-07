@@ -10,7 +10,7 @@ create table driver
     license_category varchar(30) null,
     cellphone        varchar(30) null unique
 )
-comment 'Tabla de choferes';// en consola anda
+    comment 'Tabla de choferes';
 
 create table truck
 (
@@ -21,19 +21,19 @@ create table truck
     max_tons      int         null,
     tank_capacity int         null
         comment 'Capacidad el tanque en litros',
-    consumption    int         null
+    consumption   int         null
         comment 'Consummo de nafta en km/L'
 )
-comment 'Tabla de camiones';
+    comment 'Tabla de camiones';
 
 create table truck_drivers
 (
-    driver_dni         int not null unique
+    driver_dni         int not null
         references driver (dni),
-    truck_plate_number int not null unique
+    truck_plate_number int not null
         references truck (plate_number)
 )
-comment 'Relacion entre camiones y choferes';
+    comment 'Relacion entre camiones y choferes';
 
 create index truck_drivers_index
     on truck_drivers (driver_dni, truck_plate_number);
@@ -45,13 +45,13 @@ create table trip
     driver_dni         int         not null,
     truck_plate_number int         not null,
     from_location      varchar(30) not null,
-    to_location        int         not null,
-    start              datetime,
-    end                datetime,
+    to_location        varchar(30) not null,
+    start              date,
+    end                date,
     constraint trip_truck_drivers_fk
         foreign key (driver_dni, truck_plate_number) references truck_drivers (driver_dni, truck_plate_number)
 )
-comment 'Tabla de viajes';
+    comment 'Tabla de viajes';
 
 create index trip_truck_plate_number_index
     on trip (truck_plate_number);

@@ -11,7 +11,11 @@ import camionero.dao.jdbc.JdbcUser;
 
 import java.sql.Connection;
 
-
+/**
+ * Singleton, se encarga de crear los DAO para todas las tablas
+ * cuando pido el getinstance lo inicaliza si no estaba creado pidiendole
+ * la coneccion al DBConnector
+ */
 public class DB {
 
     private final UserDAO userDAO;
@@ -44,6 +48,7 @@ public class DB {
 
     private static DB connector = null;
 
+    //Crea la instancia de DB la cual llama a la Connector para pedirle la coneccion
     public static DB getInstance() {
         if (connector == null) {
             connector = new DB(DBConnector.getConnection());

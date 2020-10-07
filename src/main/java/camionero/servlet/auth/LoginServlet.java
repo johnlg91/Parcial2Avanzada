@@ -47,6 +47,7 @@ public class LoginServlet extends HttpServlet {
         }
     }
 
+    //devuelve el user si es q ya esta logeado en la sesion, sino devuelve null
     public static User getLoginUser(HttpServletRequest req) {
         return (User) req.getSession().getAttribute("user");
     }

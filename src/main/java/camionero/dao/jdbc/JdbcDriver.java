@@ -3,10 +3,7 @@ package camionero.dao.jdbc;
 import camionero.dao.interfaces.DriverDAO;
 import camionero.model.Driver;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
+import java.sql.*;
 
 public class JdbcDriver extends JdbcBase<Driver, Integer> implements DriverDAO {
 
@@ -29,22 +26,24 @@ public class JdbcDriver extends JdbcBase<Driver, Integer> implements DriverDAO {
         final Driver driver = new Driver(rs.getInt(getPKColumnName()));
         driver.setFirstName(rs.getString("first_name"));
         driver.setLastName(rs.getString("last_name"));
-        driver.setBirthDate(rs.getDate("birth_date"));
-        driver.setLicenseCategory(rs.getInt("license_category"));
-        driver.setCellPhone(rs.getString("cellphone"));
+        driver.setBirthDate(rs.getDate("birth_date").toLocalDate());
+        driver.setLicenseCategory(rs.getString("license_category"));
+        driver.setCellphone(rs.getString("cellphone"));
         return driver;
     }
 
+
+    //llama al insert y se le va pasando el valor uno por uno
     @Override
     public boolean insert(Driver driver) {
         try (PreparedStatement ps = connection.prepareStatement(
-                "INSERT INTO driver(dni, first_name, last_name, birth_date, license_category, cellphone) VALUES (?, ?, ?, ?)")) {
+                "INSERT INTO driver(dni, first_name, last_name, birth_date, license_category, cellphone) VALUES (?, ?, ?, ?, ?, ?)")) {
             ps.setInt(1, driver.getDni());
             ps.setString(2, driver.getFirstName());
             ps.setString(3, driver.getLastName());
-            ps.setDate(4, new java.sql.Date(driver.getBirthDate().getTime()));
-            ps.setInt(5, driver.getLicenseCategory());
-            ps.setString(6, driver.getCellPhone());
+            ps.setDate(4, Date.valueOf(driver.getBirthDate()));
+            ps.setString(5, driver.getLicenseCategory().name());
+            ps.setString(6, driver.getCellphone());
             return executeUpdate(ps);
         } catch (SQLException ex) {
             ex.printStackTrace();

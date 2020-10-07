@@ -13,6 +13,10 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.List;
 
+
+/* Homeservlet se encarga de fijarse si el usuario esta logeado en la sesion o no
+ *
+ */
 @WebServlet({""})
 public class HomeServlet extends HttpServlet {
 
@@ -26,10 +30,10 @@ public class HomeServlet extends HttpServlet {
         if (loginUser == null) {
             resp.sendRedirect("/login");
         } else {
+            //Muetsra la lista de viajes del chofer
             final int dni = loginUser.getDni();
-            final List<Trip> myTrip = DB.getInstance().getTripDAO().listDriverTrips(dni);
-
-            req.setAttribute("myTrip", myTrip);
+            final List<Trip> myTrips = DB.getInstance().getTripDAO().listDriverTrips(dni);
+            req.setAttribute("myTrips", myTrips);
             req.getRequestDispatcher("/index.jsp").include(req, resp);
         }
     }

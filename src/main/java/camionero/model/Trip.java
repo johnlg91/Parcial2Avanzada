@@ -2,19 +2,17 @@ package camionero.model;
 
 import camionero.dao.DB;
 
-import java.time.LocalDateTime;
-import java.time.ZoneId;
-import java.util.Date;
+import java.time.LocalDate;
 
 public class Trip {
 
     private int tripId;
     private int driverDni;
-    private int tuckPlate;
+    private int truckPlate;
     private Location from;
     private Location to;
-    private LocalDateTime start;
-    private LocalDateTime end;
+    private LocalDate start;
+    private LocalDate end;
 
     public Trip(int tripId) {
         this.tripId = tripId;
@@ -36,12 +34,12 @@ public class Trip {
         this.driverDni = driverDni;
     }
 
-    public int getTuckPlate() {
-        return tuckPlate;
+    public int getTruckPlate() {
+        return truckPlate;
     }
 
-    public void setTuckPlate(int tuckPlate) {
-        this.tuckPlate = tuckPlate;
+    public void setTruckPlate(int truckPlate) {
+        this.truckPlate = truckPlate;
     }
 
     public Location getFrom() {
@@ -68,57 +66,42 @@ public class Trip {
         this.to = Location.valueOf(to);
     }
 
-    public LocalDateTime getStart() {
+    public LocalDate getStart() {
         return start;
     }
 
-    public void setStart(LocalDateTime start) {
+    public void setStart(LocalDate start) {
         this.start = start;
     }
 
-    public void setStart(Date date) {
-        if (date != null) {
-            setStart(date.toInstant()
-                    .atZone(ZoneId.systemDefault())
-                    .toLocalDateTime());
-        }
-    }
 
-    public LocalDateTime getEnd() {
+    public LocalDate getEnd() {
         return end;
     }
 
-    public void setEnd(LocalDateTime end) {
+    public void setEnd(LocalDate end) {
         this.end = end;
-    }
-
-    public void setEnd(Date date) {
-        if (date != null) {
-            setEnd(date.toInstant()
-                    .atZone(ZoneId.systemDefault())
-                    .toLocalDateTime());
-        }
     }
 
     public int getDistance() {
         return from.getDistanceTo(to);
     }
 
-    // da la cantidad de dias
+    //la cantidad de dias q tarde un viaje en completarse
     public double getTimeDays() {
-        return getDistance() / 200;
+        return getDistance() / 200.0;
     }
 
-    // da la cantidad de tanques
+    //la cantidad de tanques q se nesecitan para hacer le recorrido
     public double getTanks() {
-        final Truck truck = DB.getInstance().getTruckDAO().find(getTuckPlate());
+        final Truck truck = DB.getInstance().getTruckDAO().find(getTruckPlate());
         if (truck == null) return 0;
 
-        final int distance = getDistance(); // 100
-        final int consumption = truck.getConsumption(); // 10 l/km
-        final int tankCapacity = truck.getTankCapacity();
-
+        final int distance = getDistance(); // 100km
+        final float consumption = truck.getConsumption(); // 10 l/km
+        final int tankCapacity = truck.getTankCapacity();//50l
+        //100*10 = 1000
         final double litrosRequeridos = distance * consumption;
-        return litrosRequeridos / tankCapacity;
+        return litrosRequeridos / tankCapacity; // 1000/50 = 20
     }
 }

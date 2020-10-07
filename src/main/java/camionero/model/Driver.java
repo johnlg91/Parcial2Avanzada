@@ -1,15 +1,31 @@
 package camionero.model;
 
-import java.util.Date;
+import java.time.LocalDate;
 
 public class Driver {
+
+    public enum License{
+        LIGHT(2),
+        MEDIUM(3),
+        HEAVY(6);
+
+        int truckWeight;
+
+        License(int truckWeight) {
+            this.truckWeight = truckWeight;
+        }
+
+        public int getTruckWeight() {
+            return truckWeight;
+        }
+    }
 
     private final int dni;
     private String firstName;
     private String lastName;
-    private Date birthDate;
-    private int licenseCategory;
-    private String cellPhone;
+    private LocalDate birthDate;
+    private License licenseCategory;
+    private String cellphone;
 
     public Driver(int dni) {
         this.dni = dni;
@@ -35,27 +51,28 @@ public class Driver {
         this.lastName = lastName;
     }
 
-    public Date getBirthDate() {
+    public LocalDate getBirthDate() {
         return birthDate;
     }
 
-    public void setBirthDate(Date birthDate) {
-        this.birthDate = birthDate;
+    public void setBirthDate(LocalDate birthDate) {
+        //if (birthDate == null) this.birthDate = new LocalDate(1970,1,1);
+         this.birthDate = birthDate;
     }
 
-    public int getLicenseCategory() {
+    public License getLicenseCategory() {
         return licenseCategory;
     }
 
-    public void setLicenseCategory(int licenseCategory) {
-        this.licenseCategory = licenseCategory;
+    public void setLicenseCategory(String licenseCategory) {
+        this.licenseCategory = License.valueOf(licenseCategory);
     }
 
-    public String getCellPhone() {
-        return cellPhone;
+    public String getCellphone() {
+        return cellphone;
     }
 
-    public void setCellPhone(String cellPhone) {
-        this.cellPhone = cellPhone;
+    public void setCellphone(String cellphone) {
+        this.cellphone = cellphone;
     }
 }

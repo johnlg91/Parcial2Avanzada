@@ -8,6 +8,8 @@ import java.util.List;
 
 import static java.lang.String.format;
 
+
+//Clase base para los jdbc, implementan los metodos de la interface CRUD mas genericos
 public abstract class JdbcBase<T, PK> implements CRUD<T, PK> {
 
     protected final Connection connection;
@@ -19,6 +21,7 @@ public abstract class JdbcBase<T, PK> implements CRUD<T, PK> {
     abstract String getTableName();
 
     abstract String getPKColumnName();
+
 
     abstract T toModel(ResultSet rs) throws SQLException;
 

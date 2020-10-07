@@ -42,26 +42,22 @@
         <th>Desde</th>
         <th>Hasta</th>
         <th>Camion</th>
-
         <th>Distancia</th>
         <th>Dias</th>
         <th>Tanques</th>
-
         <th>Iniciado</th>
         <th>Terminado</th>
     </tr>
-    <c:forEach var="myTrip" items="${myTrips}">
+    <c:forEach var="myTrip" items="${myTrips}">--%>
         <tr>
             <td>${myTrip.from}</td>
             <td>${myTrip.to}</td>
-            <td>${myTrip.trackPlateNumber}</td>
-
+            <td>${myTrip.truckPlate}</td>
             <td>${myTrip.distance}</td>
             <td>${myTrip.timeDays}</td>
             <td>${myTrip.tanks}</td>
-
             <td>
-                <form action="/" method="post">
+                <form action="" method="post">
                     <input type="checkbox" name="started" value="${myTrip.start != null}"/>
                     <button type="submit">Guardar</button>
                 </form>

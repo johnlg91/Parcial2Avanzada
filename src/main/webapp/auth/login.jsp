@@ -1,5 +1,6 @@
 <%@ page contentType="text/html;charset=UTF-8" %>
-
+<!--login.jsp genera el html para el login page, tiene dos inputs separados en divisiones
+y pro ultimo el boton de login q manda la request al servlet-->
 <html>
 <head>
     <title>Camionero Login</title>

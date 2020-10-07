@@ -11,30 +11,45 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.List;
 
-@WebServlet({"trucks"})
+@WebServlet({"trucks"}) //El servlet para la lista de camiones
 public class TruckServlet extends HttpServlet {
 
+    @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp)
             throws ServletException, IOException {
 
-        final List<Truck> trucks = DB.getInstance().getTruckDAO().list();
+        final List<Truck> trucks = DB.getInstance().getTruckDAO().list(); // busca la lista
 
         req.setAttribute("trucks", trucks);
 
         req.getRequestDispatcher("/admin/trucks.jsp").include(req, resp);
     }
 
+    @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp)
             throws ServletException, IOException {
+
+        //si el ID es distinto de nulo, llama al doDelete
+        if (req.getParameter("id")!= null) {
+            doDelete(req, resp);
+            return;
+        }
+
         // agarramos los datos posteados
-        String plateNumber = req.getParameter("plate_number");
+        int plateNumber = Integer.parseInt(req.getParameter("plate_number"));
         String brand = req.getParameter("brand");
-        // todo get parameters para los datos
+        String model = req.getParameter("model");
+        int maxTons = Integer.parseInt(req.getParameter("max_tons"));
+        int tankCapacity = Integer.parseInt(req.getParameter("tank_capacity"));
+        int consumption = Integer.parseInt(req.getParameter("consuption"));
 
         // creamos el nuevo camion
-        Truck truck = new Truck(Integer.parseInt(plateNumber));
+        Truck truck = new Truck(plateNumber);
         truck.setBrand(brand);
-        // todo set todos los datos
+        truck.setModel(model);
+        truck.setMaxTons(maxTons);
+        truck.setTankCapacity(tankCapacity);
+        truck.setConsumption(consumption);
 
         // guardamos el nuevo camion
         DB.getInstance().getTruckDAO().insert(truck);

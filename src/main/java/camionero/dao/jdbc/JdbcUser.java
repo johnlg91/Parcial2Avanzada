@@ -3,10 +3,7 @@ package camionero.dao.jdbc;
 import camionero.dao.interfaces.UserDAO;
 import camionero.model.User;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
+import java.sql.*;
 
 public class JdbcUser extends JdbcBase<User, String> implements UserDAO {
 
@@ -32,6 +29,8 @@ public class JdbcUser extends JdbcBase<User, String> implements UserDAO {
         user.setAdmin(rs.getBoolean("admin"));
         return user;
     }
+
+
 
     @Override
     public boolean insert(User user) {
